@@ -1,2 +1,2 @@
 # PythonPasswordManager
-Password Manger with UI and AES algorithm to encrypt and decrypt all files
+Password Manger with GUI and algorithm to encrypt and decrypt all passwords.
