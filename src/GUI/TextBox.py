@@ -41,8 +41,6 @@ def addAll(text):
 
 def save():
     t = text.get("1.0", "end-1c")
-
-
     if(len(t))>0:
 
         input_file = '../FilePassword/Decifrate.txt'
