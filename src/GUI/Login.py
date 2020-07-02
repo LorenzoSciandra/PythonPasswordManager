@@ -10,11 +10,12 @@ from src.GUI import TextBox
 
 
 def login():
-    file = open("../FilePassword/pp.txt","r")
-    p = file.read()
-    s = entry.get()
-    if(len(p) > 0):
+    fileKey = open('../FilePassword/key.key', 'rb')
+    key = fileKey.read()  # The key will be type bytes
+    fileKey.close()
 
+    s = entry.get()
+    if(len(key) > 0):
         s = s.replace(" ", "")
         s = s.encode()
         salt = b'salt_'  # CHANGE THIS - recommend using a key from os.urandom(16), must be of type bytes
@@ -25,16 +26,14 @@ def login():
             iterations=100000,
             backend=default_backend()
         )
-        key = base64.urlsafe_b64encode(kdf.derive(s))
-        encoding = 'utf-8'
+        keyInserita = base64.urlsafe_b64encode(kdf.derive(s))
 
-        if(p == str(key, encoding)):
-            print('Uguali')
-            TextBox.modify()
+        if(key == keyInserita):
+            TextBox.modify(screen)
         else:
             messagebox.showerror('Password Errata', 'La password principale di sistema non corrisponde')
     else:
-        fileWrite = open("../FilePassword/pp.txt", "wb")
+
         string_value = simpledialog.askstring('Non hai ancora una password!', 'Che password di sistema vuoi usare? \nSceglila bene, sarà quella che dovrai usare ogni volta che accesi!',)
         string_value = string_value.replace(" ", "")
         string_value = string_value.encode()
@@ -47,9 +46,11 @@ def login():
             backend=default_backend()
         )
         key = base64.urlsafe_b64encode(kdf.derive(string_value))
-        fileWrite.write(key)
+        file = open('key.key', 'wb')
+        file.write(key)  # The key is type bytes still
+        file.close()
 
-
+global screen
 screen = Tk()
 screen.geometry("600x400")
 screen.title("Login")
@@ -60,10 +61,6 @@ entry.pack()
 Label(text = "").pack()
 b = Button(text="Login", height="2", width="30", command=login)
 b.pack()
-
-
-
-
 screen.mainloop()
 
 
